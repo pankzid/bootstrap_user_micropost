@@ -1,0 +1,22 @@
+<h2>List of Users</h2>
+
+<%= will_paginate @users, renderer: BootstrapPagination::Rails%>
+<table class="users table table-hover ">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Email</th>
+			<th>Name</th>
+			<th>Image</th>
+		</tr>
+	</thead>
+	<% @users.each_with_index do |user, index| %>
+		<tr>
+			<td><%= index+1 %></td>
+			<td><%= link_to user.email, user %></td>
+			<td><%= user.name %></td>
+			<td><%= image_tag user.image_base64, alt: user.name, class: 'img-circle' %></td>
+		</tr>
+	<% end %>
+</table>
+<%= will_paginate @users, renderer: BootstrapPagination::Rails %>
