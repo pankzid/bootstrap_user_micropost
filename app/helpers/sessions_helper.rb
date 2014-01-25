@@ -20,4 +20,9 @@ module SessionsHelper
 	def user_signed_in?
 		!current_user.nil?
 	end
+
+	# def authorize_user?(user)
+	# 	Rails.logger.info current_user.inspect
+	# 	current_user == user
+	# end
 end

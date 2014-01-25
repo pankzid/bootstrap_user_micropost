@@ -1,7 +1,7 @@
 BootstrapUserMicropost::Application.routes.draw do
   root 'users#index'
 
-  resources :users, only: [:show, :update]
+  resources :users, only: [:show, :update, :destroy]
   get 'signup' => 'users#new'
   get 'edit/:id' => 'users#edit', as: :edit_user
   get 'login' => 'sessions#new'

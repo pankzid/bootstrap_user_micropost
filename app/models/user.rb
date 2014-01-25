@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+	attr_accessor :current_password
+	attr_reader :admin
 
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	validates :name, presence: true, 
@@ -6,19 +8,18 @@ class User < ActiveRecord::Base
 	validates :email, presence: true, 
 	          format: {with: VALID_EMAIL_REGEX},
 	          uniqueness: {case_sensitive: false}
+	validates :password, length: {minimum: 6}, if: :password || :password_digest.blank?
 	# validates :password_confirmation, presence: true
 
 	has_secure_password
 
+	default_scope ->{ where(is_active: true) }
+
 	before_save { self.email.downcase! }
 	before_save :create_remember_token
 
-	def password_validation(state)
-			User.validates :password, length: {minimum: 6} if state
-	end
-
-	def valid_user?(password)
-		self.authenticate(password)
+	def check_current_password(password)
+		self.authenticate(password) ? true : false
 	end
 
 	private

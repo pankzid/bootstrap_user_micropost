@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
 			sign_in user
 			redirect_to user
 		else
-			flash.alert = 'Kombinasi email/password tidak sesuai!'
+			flash.now.alert = 'Kombinasi email/password tidak sesuai!'
 			render :new
 		end
 	end
