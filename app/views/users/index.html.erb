@@ -16,6 +16,7 @@
 			<td><%= link_to user.email, user %></td>
 			<td><%= user.name %></td>
 			<td><%= image_tag user.image_base64, alt: user.name, class: 'img-circle' %></td>
+			<td><%= link_to 'Edit', edit_user_path(user) %></td>
 		</tr>
 	<% end %>
 </table>

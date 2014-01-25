@@ -1,11 +1,14 @@
 BootstrapUserMicropost::Application.routes.draw do
   root 'users#index'
 
-  resources :users, only: [:show]
+  resources :users, only: [:show, :update]
   get 'signup' => 'users#new'
-  post 'signup' => 'users#create', as: :users
+  get 'edit/:id' => 'users#edit', as: :edit_user
   get 'login' => 'sessions#new'
+
+  post 'signup' => 'users#create', as: :users
   post 'login' => 'sessions#create', as: :sessions
+  
   match 'logout' => 'sessions#destroy', via: :delete
 
   # The priority is based upon order of creation: first created -> highest priority.
