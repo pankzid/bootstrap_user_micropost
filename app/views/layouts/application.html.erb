@@ -26,7 +26,10 @@
 						<li class="active"><%= link_to 'Sign up', signup_path %></li>
 						<li><%= link_to 'Login', login_path %></li>
 					<% else %>
-						<li><%= link_to current_user.name, current_user %></li>
+						<% if is_admin?(current_user) %>
+							<li><%= link_to "All users", users_path %></li>
+						<% end %>
+						<li><%= link_to current_user.email, user_path(current_user.name) %></li>
 						<li><%= link_to 'Logout', logout_path, method: :delete %></li>
 					<% end %>
 					<li class="dropdown">
@@ -48,10 +51,10 @@
 			</div><!--/.nav-collapse -->
 		</div>
 		
-		<div class="notification">
-			<p class="alert alert-notice"><%= notice %></p>
-			<p class="alert alert-error"><%= alert %></p>
-		</div>
+		<% flash.each do |key, value| %>
+			<% key = key == :notice ? 'info' : 'danger' %>
+			<%= content_tag(:div, value, class: "alert alert-#{key}") %>
+		<% end %>
 
 		<%= yield %>
 		

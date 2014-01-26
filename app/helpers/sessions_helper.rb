@@ -21,8 +21,20 @@ module SessionsHelper
 		!current_user.nil?
 	end
 
-	# def authorize_user?(user)
-	# 	Rails.logger.info current_user.inspect
-	# 	current_user == user
-	# end
+	def authorize_user?(user)
+		(current_user == user) || (current_user.admin? && !is_admin?(user))
+	end
+
+	def is_admin?(user)
+		user.admin?
+	end
+
+	def redirect_back_or(default)
+		redirect_to session[:return_to] || default
+		session.delete(:return_to)
+	end
+
+	def store_location
+		session[:return_to] = request.fullpath
+	end
 end

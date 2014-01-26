@@ -4,9 +4,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   include SessionsHelper
 
-  helper_method :authorize_user?
+ #  helper_method :authorize_user?
   	
-	def authorize_user?(user)
-		(current_user == user) || (current_user.admin? && !user.admin?)
-	end
+	# def authorize_user?(user)
+	# 	(current_user == user) || (current_user.admin? && !user.admin?)
+	# end
 end

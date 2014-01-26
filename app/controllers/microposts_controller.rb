@@ -1,6 +1,6 @@
 class MicropostsController < ApplicationController
-	before_filter :signed_in?, only:[:create, :update, :destroy]
-	before_filter :correct_user, only: [:destroy]
+	before_filter :signed_in?, only:[:edit, :create, :update, :destroy]
+	before_filter :correct_user, only: [:edit, :update, :destroy]
 
 	def index
 		
@@ -16,26 +16,43 @@ class MicropostsController < ApplicationController
 		end
 	end
 
+	def edit
+		@micropost = set_micropost
+	end
+
+	def update
+		@micropost = set_micropost
+
+		if @micropost.update_attributes(micropost_params)
+			redirect_to current_user, notice: "micropost update successfully"
+		else
+			render :edit
+		end
+	end
+
 	def destroy
 		@micropost.destroy
-		redirect_to root_path, notice: "Micropost deleted"
+		redirect_to current_user, notice: "Micropost deleted"
 	end
 
 	private
-
 	def micropost_params
 		params.require(:micropost).permit(:content)
 	end
 
+	def set_micropost
+		current_user.microposts.find(params[:id])
+	end
+
 	def signed_in?
 		unless user_signed_in?
-			# store_location
+			store_location
 			redirect_to login_path, notice: "Please login!"
 		end
 	end
 
 	def correct_user
-		@micropost = current_user.microposts.find(params[:id])
+		@micropost =  set_micropost
 		redirect_to root_path if @micropost.nil?
 	end
 end

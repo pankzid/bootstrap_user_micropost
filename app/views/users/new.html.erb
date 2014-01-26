@@ -1,17 +1,9 @@
 <% provide(:title, 'Sign Up') %>
-<h2 class="col-sm-offset-6">Sign Up</h2>
+<h2 class="col-sm-offset-5">Sign Up</h2>
 <br>
 
 <%= form_for @user, url: signup_path, method: :post, html: { class: "form-horizontal col-sm-8 col-sm-offset-2", role: "form" } do |f| %>
-  <% if @user.errors.any? %>
-  <div class="errors_explanation col-sm-offset-2">
-    <ul>
-     <% @user.errors.full_messages.each do |msg| %>
-     <li><%= msg %></li>
-     <% end %>
-   </ul>
-  </div>
-  <% end %>
+  <%= render partial: 'shared/error_messages', locals: {object: f.object} %>
 
   <div class="form-group">
     <%= f.label :email, "Email", class: "col-sm-2 control-label" %> 

@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_filter :signed_user, only: [:edit, :update, :destroy]
+  before_filter :signed_user, only: [:edit, :update, :destroy, :show]
   before_filter :correct_user, only: [:edit, :update, :destroy]
-  before_filter :set_user, only: [:show, :edit, :update, :destroy]
+  before_filter :set_user, only: [:edit, :update, :destroy]
 
 	def index
 		@users = User.paginate(page: params[:page], per_page: 5)
@@ -12,8 +12,12 @@ class UsersController < ApplicationController
   end
 
   def show
-  	@user = set_user
-    @microposts = @user.microposts.paginate(page: params[:page], per_page: 5)
+  	@user = User.find_by(name: params[:name])
+    if @user
+      @microposts = @user.microposts.paginate(page: params[:page], per_page: 5)
+    else
+      redirect_to root_path
+    end
   end
 
   def create
@@ -21,7 +25,7 @@ class UsersController < ApplicationController
 
   	if @user.save
       sign_in @user
-  		redirect_to root_path
+  		redirect_back_or @user
   	else
   		render :new
   	end
@@ -53,18 +57,18 @@ class UsersController < ApplicationController
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
       new_params = params.require(:user).permit(:email, :name, :image_base64)
-      current_password_user(params[:user][:current_password], new_params)
+      update_attributes_user(params[:user][:current_password], new_params)
     else
       Rails.logger.info 'no-blank'
       new_params = params.require(:user).permit(:name, :email, :password, :password_confirmation, :image_base64)
-      current_password_user(params[:user][:current_password], new_params)
+      update_attributes_user(params[:user][:current_password], new_params)
     end
 
-    Rails.logger.info updated
-
     if updated
-      sign_in @user if password_exist
-      redirect_to @user, notice: 'Updated successfully'
+      # sign_in @user if password_exist
+      sign_in @user
+      flash[:notice] = "Successfully updated..."
+      redirect_back_or @user
     else
       render :edit
     end
@@ -79,17 +83,20 @@ class UsersController < ApplicationController
     User.find(params[:id])
   end
 
-  def current_password_user(password, new_params)
-    if @user.check_current_password(password)
-      @user.update_attributes(new_params)
+  def update_attributes_user(password, new_params)
+    if @user.check_current_password(password) && @user.update_attributes(new_params)
+      true
     else
-      flash.now[:alert] = "Current password is invalid"
+      flash.now[:alert] = "Cannot saves changed!"
       false
     end
   end
 
   def signed_user
-    redirect_to login_path, notice: "Please sign in!" unless user_signed_in?
+    unless user_signed_in?
+      store_location
+      redirect_to login_path, notice: "Please Login!" 
+    end
   end
 
   def correct_user

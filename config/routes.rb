@@ -1,11 +1,13 @@
 BootstrapUserMicropost::Application.routes.draw do
   root 'static_pages#home'
 
-  resources :users, only: [:index, :show, :update, :destroy]
-  resources :microposts, only: [:create, :destroy]
+  resources :users, only: [:index, :update, :destroy] do
+    resources :microposts, only: [:create, :destroy, :edit, :update]
+  end
 
   get 'signup' => 'users#new'
   get 'edit/:id' => 'users#edit', as: :edit_user
+  get 'users/:name' => 'users#show'
   get 'login' => 'sessions#new'
 
   post 'signup' => 'users#create'
