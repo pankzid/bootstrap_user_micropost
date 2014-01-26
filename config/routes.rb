@@ -1,15 +1,17 @@
 BootstrapUserMicropost::Application.routes.draw do
-  root 'users#index'
+  root 'static_pages#home'
 
-  resources :users, only: [:show, :update, :destroy]
+  resources :users, only: [:index, :show, :update, :destroy]
+  resources :microposts, only: [:create, :destroy]
+
   get 'signup' => 'users#new'
   get 'edit/:id' => 'users#edit', as: :edit_user
   get 'login' => 'sessions#new'
 
-  post 'signup' => 'users#create', as: :users
-  post 'login' => 'sessions#create', as: :sessions
+  post 'signup' => 'users#create'
+  post 'login' => 'sessions#create'
   
-  match 'logout' => 'sessions#destroy', via: :delete
+  match 'logout' => 'sessions#destroy', via: :delete, as: :logout
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

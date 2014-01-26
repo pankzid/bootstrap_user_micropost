@@ -1,7 +1,8 @@
 <% provide(:title, 'Sign Up') %>
-<h2 class="col-sm-offset-5">Sign Up</h2>
+<h2 class="col-sm-offset-6">Sign Up</h2>
+<br>
 
-<%= form_for @user, html: { class: "form-horizontal", role: "form" } do |f| %>
+<%= form_for @user, url: signup_path, method: :post, html: { class: "form-horizontal col-sm-8 col-sm-offset-2", role: "form" } do |f| %>
   <% if @user.errors.any? %>
   <div class="errors_explanation col-sm-offset-2">
     <ul>

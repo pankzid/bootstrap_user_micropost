@@ -1,0 +1,10 @@
+<% if user_signed_in? %>
+	<div class="col-sm-4">
+		<h2>Welcome <%= link_to current_user.name.titleize, current_user %></h2>
+		<%= gravatar_for current_user %>
+		<p><%= pluralize(current_user.microposts.count, 'micropost') %></p>
+	</div>
+	<%= render 'shared/micropost_form' %>	
+<% else %>
+	<%= render 'sessions/signin_form' %>
+<% end %>

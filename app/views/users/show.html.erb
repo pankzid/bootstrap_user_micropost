@@ -1,2 +1,13 @@
-<h2>Welcome <%= @user.name.titleize %></h2>
-<%= gravatar_for @user %>
+<div class="col-sm-3">
+	<h2>Welcome <%= @user.name.titleize %></h2>
+	<%= gravatar_for @user %>
+</div>
+<div class="col-sm-7 col-sm-offset-1">
+	<% if @microposts.any? %>
+		<h3>Micropost (<%= @user.microposts.count %>)</h3>
+		<ol class="microposts">
+			<%= render @microposts %>
+		</ol>
+		<%= will_paginate @microposts, renderer: BootstrapPagination::Rails %>
+	<% end %>
+</div>

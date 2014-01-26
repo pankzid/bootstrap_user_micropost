@@ -13,6 +13,7 @@ class UsersController < ApplicationController
 
   def show
   	@user = set_user
+    @microposts = @user.microposts.paginate(page: params[:page], per_page: 5)
   end
 
   def create
@@ -20,7 +21,7 @@ class UsersController < ApplicationController
 
   	if @user.save
       sign_in @user
-  		redirect_to @user
+  		redirect_to root_path
   	else
   		render :new
   	end

@@ -33,7 +33,7 @@
 						<a data-toggle="dropdown" class="dropdown-toggle" href="#">Dropdown <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a href="#">Action</a></li>
-							<% if !user_signed_in? %>
+							<% unless user_signed_in? %>
 								<li><%= link_to 'Login', login_path %></li>
 							<% else %>
 								<li><%= link_to 'Logout', logout_path, method: :delete %></li>
@@ -47,10 +47,10 @@
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
-
+		
 		<div class="notification">
-			<p class="notice"><%= notice %></p>
-			<p class="alert"><%= alert %></p>
+			<p class="alert alert-notice"><%= notice %></p>
+			<p class="alert alert-error"><%= alert %></p>
 		</div>
 
 		<%= yield %>
